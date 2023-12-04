@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Generator</title>
+</head>
+<body>
+  <h1>Password Generator</h1>
+  <form id="passwordForm">
+    <label for="password_length">Password Length:</label>
+    <input type="number" id="password_length" name="password_length" min="1" max="100" required>
+    <button type="submit">Generate Password</button>
+  </form>
+  <p id="generatedPassword"></p>
+
+  <script>
+    document.getElementById('passwordForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const passwordLength = document.getElementById('password_length').value;
+      fetch('/generate_password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `password_length=${passwordLength}`
+      })
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('generatedPassword').textContent = `Your generated password: ${data}`;
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>
